@@ -1,0 +1,863 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "THE HERA CLASS APIS",
+    "description": "THE HERA CLASS APIS",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/emailExists/{email}": {
+      "get": {
+        "description": "이메일 존재 여부를 확인합니다.",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "확인할 이메일 주소"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "요청이 성공하고, 이메일이 존재함을 나타냅니다."
+          },
+          "404": {
+            "description": "요청이 성공하고, 이메일이 존재하지 않음을 나타냅니다."
+          }
+        }
+      }
+    },
+    "/api/nicknameExists/{nickname}": {
+      "get": {
+        "description": "닉네임 존재 여부를 확인합니다.",
+        "parameters": [
+          {
+            "name": "nickname",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "확인할 닉네임"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "요청이 성공하고, 닉네임이 존재함을 나타냅니다."
+          },
+          "404": {
+            "description": "요청이 성공하고, 닉네임이 존재하지 않음을 나타냅니다."
+          }
+        }
+      }
+    },
+    "/api/signup": {
+      "post": {
+        "description": "새로운 사용자를 등록합니다.",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "요청이 성공하고, 사용자가 등록되었음을 나타냅니다."
+          }
+        }
+      }
+    },
+    "/api/withdrawal": {
+      "delete": {
+        "description": "사용자 계정을 삭제합니다.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "요청이 성공하고, 사용자 계정이 삭제되었음을 나타냅니다."
+          },
+          "401": {
+            "description": "인증되지 않은 요청입니다."
+          },
+          "411": {
+            "description": "길이가 필요한 요청입니다."
+          },
+          "412": {
+            "description": "전제 조건이 실패한 요청입니다."
+          }
+        }
+      }
+    }
+  },
+  "/api/profile": {
+    "get": {
+      "description": "사용자 프로필 정보를 가져옵니다.",
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "요청이 성공하고, 사용자 프로필 정보를 반환합니다."
+        },
+        "401": {
+          "description": "인증되지 않은 요청입니다."
+        },
+        "411": {
+          "description": "길이가 필요한 요청입니다."
+        },
+        "412": {
+          "description": "전제 조건이 실패한 요청입니다."
+        }
+      }
+    },
+    "put": {
+      "description": "사용자 프로필 정보를 업데이트합니다.",
+      "parameters": [
+        {
+          "name": "profile",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Profile"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "요청이 성공하고, 사용자 프로필 정보가 업데이트되었음을 나타냅니다."
+        },
+        "401": {
+          "description": "인증되지 않은 요청입니다."
+        },
+        "411": {
+          "description": "길이가 필요한 요청입니다."
+        },
+        "412": {
+          "description": "전제 조건이 실패한 요청입니다."
+        }
+      }
+    }
+  },
+  "/api/sendAuthMail": {
+    "post": {
+      "description": "인증 이메일을 전송합니다.",
+      "parameters": [
+        {
+          "name": "email",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Email"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "요청이 성공하고, 인증 이메일이 전송되었음을 나타냅니다."
+        }
+      }
+    }
+  },
+  "/api/verifyMail": {
+    "get": {
+      "description": "인증 이메일을 확인합니다.",
+      "parameters": [
+        {
+          "name": "token",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "description": "인증 토큰"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "요청이 성공하고, 이메일이 인증되었음을 나타냅니다."
+        },
+        "400": {
+          "description": "잘못된 요청입니다. 유효하지 않은 토큰입니다."
+        }
+      }
+    }
+  },
+  "/api/login": {
+    "post": {
+      "description": "사용자 로그인을 수행합니다.",
+      "parameters": [
+        {
+          "name": "credentials",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Credentials"
+          }
+        }
+      ],
+      "responses" : {
+        "200": {
+          "description": "요청이 성공하고, 사용자가 로그인 되었음을 나타냅니다."
+        },
+        "401": {
+          "description": "인증되지 않은 요청입니다."
+        },
+        "411": {
+          "description": "길이가 필요한 요청입니다."
+        },
+        "412": {
+          "description": "전제 조건이 실패한 요청입니다."
+        }
+      }
+    }
+},
+"/api/logout": {
+  "post": {
+    "description": "사용자 로그아웃을 수행합니다.",
+    "parameters": [],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 사용자가 로그아웃되었음을 나타냅니다."
+      },
+      "401": {
+        "description": "인증되지 않은 요청입니다."
+      },
+      "411": {
+        "description": "길이가 필요한 요청입니다."
+      },
+      "412": {
+        "description": "전제 조건이 실패한 요청입니다."
+      }
+    }
+  }
+},
+"/api/logintst": {
+  "post": {
+    "description": "테스트용 로그인 API입니다.",
+    "parameters": [],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 로그인이 완료되었음을 나타냅니다."
+      },
+      "401": {
+        "description": "인증되지 않은 요청입니다."
+      },
+      "411": {
+        "description": "길이가 필요한 요청입니다."
+      },
+      "412": {
+        "description": "전제 조건이 실패한 요청입니다."
+      }
+    }
+  }
+},
+"/api/major": {
+  "post": {
+    "description": "새로운 전공을 추가합니다.",
+    "parameters": [
+      {
+        "name": "major",
+        "in": "body",
+        "required": true,
+        "schema": {
+          "$ref": "#/definitions/Major"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 전공이 추가되었음을 나타냅니다."
+      }
+    }
+  },
+  "get": {
+    "description": "전공 목록을 조회합니다.",
+    "parameters": [],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 전공 목록을 반환합니다."
+      }
+    }
+  }
+},
+"/api/major/{major_id}": {
+  "put": {
+    "description": "전공 정보를 업데이트합니다.",
+    "parameters": [
+      {
+        "name": "major_id",
+        "in": "path",
+        "required": true,
+        "type": "integer",
+        "description": "업데이트할 전공의 ID"
+      },
+      {
+        "name": "major",
+        "in": "body",
+        "required": true,
+        "schema": {
+          "$ref": "#/definitions/Major"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 전공 정보가 업데이트되었음을 나타냅니다."
+      }
+    }
+  },
+  "delete": {
+    "description": "전공을 삭제합니다.",
+    "parameters": [
+      {
+        "name": "major_id",
+        "in": "path",
+        "required": true,
+        "type": "integer",
+        "description": "삭제할 전공의 ID"
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 전공이 삭제되었음을 나타냅니다."
+      }
+    }
+  }
+},
+"/api/certificate": {
+  "post": {
+    "description": "새로운 자격증을 추가합니다.",
+    "parameters": [
+      {
+        "name": "certificate",
+        "in": "body",
+        "required": true,
+        "schema": {
+          "$ref": "#/definitions/Certificate"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 자격증이 추가되었음을 나타냅니다."
+      }
+    }
+  },
+  "get": {
+    "description": "자격증 목록을 조회합니다.",
+    "parameters": [],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 자격증 목록을 반환합니다."
+      }
+    }
+  }
+},
+"/api/certificate/{certificate_id}": {
+  "put": {
+    "description": "자격증 정보를 업데이트합니다.",
+    "parameters": [
+      {
+        "name": "certificate_id",
+        "in": "path",
+        "required": true,
+        "type": "integer",
+        "description": "업데이트할 자격증의 ID"
+      },
+      {
+        "name": "certificate",
+        "in": "body",
+        "required": true,
+        "schema": {
+          "$ref": "#/definitions/Certificate"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 자격증 정보가 업데이트되었음을 나타냅니다."
+      }
+    }
+  },
+  "delete": {
+    "description": "자격증을 삭제합니다.",
+    "parameters": [
+      {
+        "name": "certificate_id",
+        "in": "path",
+        "required": true,
+        "type": "integer",
+        "description": "삭제할 자격증의 ID"
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 자격증이 삭제되었음을 나타냅니다."
+      }
+    }
+  }
+},
+"/api/subject": {
+  "post": {
+    "description": "새로운 과목을 추가합니다.",
+    "parameters": [
+      {
+        "name": "subject",
+        "in": "body",
+        "required": true,
+        "schema": {
+          "$ref": "#/definitions/Subject"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 과목이 추가되었음을 나타냅니다."
+      }
+    }
+  },
+  "get": {
+    "description": "과목 목록을 조회합니다.",
+    "parameters": [],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 과목 목록을 반환합니다."
+      }
+    }
+  }
+},
+"/api/subject/{subject_id}": {
+  "put": {
+    "description": "과목 정보를 업데이트합니다.",
+    "parameters": [
+      {
+        "name": "subject_id",
+        "in": "path",
+        "required": true,
+        "type": "integer",
+        "description": "업데이트할 과목의 ID"
+      },
+      {
+        "name": "subject",
+        "in": "body",
+        "required": true,
+        "schema": {
+          "$ref": "#/definitions/Subject"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 과목 정보가 업데이트되었음을 나타냅니다."
+      }
+    }
+  },
+  "delete": {
+    "description": "과목을 삭제합니다.",
+    "parameters": [
+      {
+        "name": "subject_id",
+        "in": "path",
+        "required": true,
+        "type": "integer",
+        "description": "삭제할 과목의 ID"
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "요청이 성공하고, 과목이 삭제되었음을 나타냅니다."
+      }
+    }
+  }
+},
+"/major": {
+  "post": {
+    "description": "새로운 전공을 추가합니다."
+  },
+  "parameters": [
+    {
+      "name": "major",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/Major"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 전공이 추가되었음을 나타냅니다."
+    }
+  }
+},
+"get": {
+  "description": "전공 목록을 조회합니다.",
+  "parameters": [],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 전공 목록을 반환합니다."
+    }
+  }
+},
+"/major/{major_id}": {
+"put": {
+  "description": "전공 정보를 업데이트합니다.",
+  "parameters": [
+    {
+      "name": "major_id",
+      "in": "path",
+      "required": true,
+      "type": "integer",
+      "description": "업데이트할 전공의 ID"
+    },
+    {
+      "name": "major",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/Major"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 전공 정보가 업데이트되었음을 나타냅니다."
+    }
+  }
+},
+"delete": {
+  "description": "전공을 삭제합니다.",
+  "parameters": [
+    {
+      "name": "major_id",
+      "in": "path",
+      "required": true,
+      "type": "integer",
+      "description": "삭제할 전공의 ID"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 전공이 삭제되었음을 나타냅니다."
+    }
+  }
+}
+},
+"/certificate": {
+"post": {
+  "description": "새로운 자격증을 추가합니다.",
+  "parameters": [
+    {
+      "name": "certificate",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/Certificate"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 자격증이 추가되었음을 나타냅니다."
+    }
+  }
+},
+"get": {
+  "description": "자격증 목록을 조회합니다.",
+  "parameters": [],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 자격증 목록을 반환합니다."
+    }
+  }
+}
+},
+"/certificate/{certificate_id}": {
+"put": {
+  "description": "자격증 정보를 업데이트합니다.",
+  "parameters": [
+    {
+      "name": "certificate_id",
+      "in": "path",
+      "required": true,
+      "type": "integer",
+      "description": "업데이트할 자격증의 ID"
+    },
+    {
+      "name": "certificate",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/Certificate"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 자격증 정보가 업데이트되었음을 나타냅니다."
+    }
+  }
+},
+"delete": {
+  "description": "자격증을 삭제합니다.",
+  "parameters": [
+    {
+      "name": "certificate_id",
+      "in": "path",
+      "required": true,
+      "type": "integer",
+      "description": "삭제할 자격증의 ID"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 자격증이 삭제되었음을 나타냅니다."
+    }
+  }
+}
+},
+"/subject": {
+"post": {
+  "description": "새로운 과목을 추가합니다.",
+  "parameters": [
+    {
+      "name": "subject",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/Subject"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 과목이 추가되었음을 나타냅니다."
+    }
+  }
+},
+"get": {
+  "description": "과목 목록을 조회합니다.",
+  "parameters": [],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 과목 목록을 반환합니다."
+    }
+  }
+}
+},
+"/subject/{subject_id}": {
+"put": {
+  "description": "과목 정보를 업데이트합니다.",
+  "parameters": [
+    {
+      "name": "subject_id",
+      "in": "path",
+      "required": true,
+      "type": "integer",
+      "description": "업데이트할 과목의 ID"
+    },
+    {
+      "name": "subject",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/Subject"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 과목 정보가 업데이트되었음을 나타냅니다."
+    }
+  }
+},
+"delete": {
+  "description": "과목을 삭제합니다.",
+  "parameters": [
+    {
+      "name": "subject_id",
+      "in": "path",
+      "required": true,
+      "type": "integer",
+      "description": "삭제할 과목의 ID"
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 과목이 삭제되었음을 나타냅니다."
+    }
+  }
+}
+},
+"/api/upload_word": {
+"post": {
+  "description": "단어를 업로드합니다.",
+  "parameters": [
+    {
+      "name": "word",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/Word"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 단어가 업로드되었음을 나타냅니다."
+    }
+  }
+}
+},
+"/api/upload_image": {
+"post": {
+  "description": "이미지를 업로드합니다.",
+  "parameters": [
+    {
+      "name": "image",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/Image"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 이미지가 업로드되었음을 나타냅니다."
+    }
+  }
+}
+},
+"/upload_word": {
+"post": {
+  "description": "단어를 업로드합니다.",
+  "parameters": [
+    {
+      "name": "word",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/Word"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "요청이 성공하고, 단어가 업로드되었음을 나타냅니다."
+    }
+  }
+}
+},
+"definitions": {
+"Profile": {
+"type": "object",
+"properties": {
+  "name": {
+    "type": "string",
+    "description": "사용자 이름"
+  },
+  "age": {
+    "type": "integer",
+    "description": "사용자 나이"
+  },
+  "email": {
+    "type": "string",
+    "description": "사용자 이메일"
+  }
+}
+},
+"Email": {
+"type": "object",
+"properties": {
+  "email": {
+    "type": "string",
+    "description": "이메일 주소"
+  }
+}
+},
+"Credentials": {
+"type": "object",
+"properties": {
+  "email": {
+    "type": "string",
+    "description": "사용자 이메일"
+  },
+  "password": {
+    "type": "string",
+    "description": "사용자 비밀번호"
+  }
+}
+},
+"Major": {
+"type": "object",
+"properties": {
+  "name": {
+    "type": "string",
+    "description": "전공 이름"
+  },
+  "code": {
+    "type": "string",
+    "description": "전공 코드"
+  }
+}
+},
+"Certificate": {
+"type": "object",
+"properties": {
+  "name": {
+    "type": "string",
+    "description": "자격증 이름"
+  },
+  "code": {
+    "type": "string",
+    "description": "자격증 코드"
+  }
+}
+},
+"Subject": {
+"type": "object",
+"properties": {
+  "name": {
+    "type":           "string",
+    "description": "과목 이름"
+  },
+  "code": {
+    "type": "string",
+    "description": "과목 코드"
+  }
+}
+},
+"Word": {
+"type": "object",
+"properties": {
+  "term": {
+    "type": "string",
+    "description": "단어"
+  },
+  "definition": {
+    "type": "string",
+    "description": "단어 정의"
+  }
+}
+},
+"Image": {
+"type": "object",
+"properties": {
+  "file": {
+    "type": "string",
+    "format": "binary",
+    "description": "이미지 파일"
+  }
+}
+}
+}
+}
+
+
+
+
+
